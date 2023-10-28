@@ -1,0 +1,7 @@
+server/node_modules
+server/dist
+server/build
+server/log
+client/node_modules
+client/dist
+client/build
