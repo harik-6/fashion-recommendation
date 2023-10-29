@@ -1,32 +1,86 @@
-import React from 'react';
+import React, { useState } from 'react';
+import ApiService from './service';
 import ImageUploader from 'react-image-upload'
 import 'react-image-upload/dist/index.css'
 
+
 const mockData = [
   {
-    "id": "sfw",
-    "image": "https://i0.wp.com/me99.in/wp-content/uploads/2021/08/Royal-Blue-Plain-T-Shirt.png?fit=1440%2C1608&ssl=1",
-    "name": "Blue T-shirt"
+    "id": 1,
+    "type": "T-Shirt",
+    "color": "Blue",
+    "skin": "Light",
+    "height": "Short",
+    "weight": "Thin",
+    "shoulder": "Narrow",
+    "occasion": "wedding",
+    "image": {
+      "id": "66CEU08LD0P5G3SSDHCV1698575755.2340846",
+      "status": "processing",
+      "url": "https://audiospace-1-u9912847.deta.app/getpic?id=66CEU08LD0P5G3SSDHCV1698575755.2340846",
+      "servercode": 0
+    }
   },
   {
-    "id": "qoisufh",
-    image: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZHJlc3N8ZW58MHx8MHx8fDA%3D',
-    name: 'Red skirt'
+    "id": 2,
+    "type": "Shirt",
+    "color": "Red",
+    "skin": "Dark",
+    "height": "Tall",
+    "weight": "Thin",
+    "shoulder": "Wide",
+    "occasion": "casual",
+    "image": {
+      "id": "TCZQ7YLU7EH06BZ3TTRG1698575757.2046175",
+      "status": "processing",
+      "url": "https://audiospace-1-u9912847.deta.app/getpic?id=TCZQ7YLU7EH06BZ3TTRG1698575757.2046175",
+      "servercode": 8
+    }
   },
   {
-    id: "27r",
-    image: "https://images.meesho.com/images/products/158975668/napsf_512.webp",
-    name: "Black jean"
+    "id": 3,
+    "type": "Jeans",
+    "color": "Black",
+    "skin": "Light",
+    "height": "Medium",
+    "weight": "Average",
+    "shoulder": "N/A",
+    "occasion": "formal",
+    "image": {
+      "id": "N9SC7MCKD6LOFXP4UGM21698575759.003108",
+      "status": "processing",
+      "url": "https://audiospace-1-u9912847.deta.app/getpic?id=N9SC7MCKD6LOFXP4UGM21698575759.003108",
+      "servercode": 7
+    }
   }
 ]
 
+const styles = {
+  button: {
+    width: "250px",
+    fontSize: "18px",
+    fontWeight: "bold",
+    border: "2px solid white",
+    borderRadius: "16px",
+    padding: "8px 0",
+    backgroundColor: "#FFC436",
+    cursor: 'pointer'
+  },
+  featurep: { margin: '2px', padding: '2px' }
+}
+
+
 function App() {
-  const [image, setImage] = React.useState(null);
-  const [showRec, setShowRec] = React.useState(false);
+  const [image, setImage] = useState(null);
+  const [imageFeatures, setImageFeatures] = useState(null);
+  const [showRec, setShowRec] = useState(true);
+  const [recommendations, setRecommendations] = useState([]);
+  const [loader, setLoader] = React.useState({ loading: false, message: '' });
 
   function resetAll() {
     setImage(null)
     setShowRec(false)
+    setImageFeatures(null);
   }
 
   function getImageFileObject(imageFile) {
@@ -34,17 +88,49 @@ function App() {
   }
 
   function runAfterImageDelete(file) {
-    setImage(null);
+    resetAll();
   }
 
-  function showRecommendations() {
-    setShowRec(true);
+  async function uploadImage() {
+    setLoader({ loading: true, message: 'Analysing image for features' });
+    let tempImage = image;
+    const features = await ApiService.uploadImage(image);
+    setImageFeatures(features);
+    setImage(tempImage);
+    setLoader({ loading: false, message: '' });
+  }
+
+
+  async function getRecommendations() {
+    setLoader({ loading: true, message: 'Getting recommendations' });
+    const recos = await ApiService.getRecommendations(imageFeatures);
+    setRecommendations(recos);
+    setTimeout(() => {
+      setShowRec(true);
+      setLoader({ loading: false, message: '' });
+    }, 10 * 1000)
+  }
+
+  if (loader.loading) {
+    return <Page>
+      <NavigationBar />
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '90vh'
+      }} >
+        <div className='page-loader' />
+        <h2>{loader.message}</h2>
+      </div>
+    </Page>
   }
 
   if (showRec) {
     return <Page>
       <NavigationBar />
-      <RecommendationImages onBack={resetAll} />
+      <RecommendationImages data={recommendations} onBack={resetAll} />
     </Page>
   }
 
@@ -59,28 +145,36 @@ function App() {
         minHeight: "90vh",
         gap: "1.5rem"
       }} >
-
+        <h3>Upload your photo</h3>
         <ImageUploader
-          style={{ transform: "scale(1.5)" }}
+          style={{ transform: "scale(1.5)", marginBottom: '32px' }}
           onFileAdded={(img) => getImageFileObject(img)}
           onFileRemoved={(img) => runAfterImageDelete(img)}
         />
-        <h3>Upload your photo</h3>
-        <button
-          onClick={showRecommendations}
-          style={{
-            width: "250px",
-            fontSize: "18px",
-            fontWeight: "bold",
-            border: "2px solid white",
-            borderRadius: "16px",
-            padding: "8px 0",
-            backgroundColor: "#FFC436",
-            cursor: 'pointer',
-            opacity: image === null ? 0.5 : 1
-          }} disabled={image === null}  >
-          Get recommendations
-        </button>
+        {
+          imageFeatures === null ? <></> : (
+            <div >
+              <p style={styles.featurep} >Skin color : {imageFeatures['skin_color']}</p>
+              <p style={styles.featurep} >Skin tone : {imageFeatures['skin_tone']}</p>
+              <p style={styles.featurep} >Gender : {imageFeatures['gender']}</p>
+              <p style={styles.featurep} >Age : {imageFeatures['age']}</p>
+              {/* <p>Shoulder : {imageFeatures['skin_color']}</p> */}
+            </div>
+          )
+        }
+        {
+          imageFeatures === null ? (
+            <button
+              onClick={uploadImage}
+              style={{ ...styles.button, opacity: image === null ? 0.5 : 1 }} disabled={image === null}  >
+              Upload image
+            </button>
+          ) : (<button
+            onClick={getRecommendations}
+            style={{ ...styles.button }} >
+            Get recommendation
+          </button>)
+        }
       </div>
     </Page>
   )
@@ -97,16 +191,17 @@ function RecommendationImages({ onBack }) {
     <p onClick={onBack} style={{ textDecoration: 'underline', cursor: 'pointer' }} >{"< Back"}</p>
     {
       mockData.map((dress) => {
+        const dressName = dress.color + dress.type
         return (
           <>
             <img
               height="350px"
               width="300px"
-              alt={dress.name}
-              src={dress.image}
+              alt={dressName}
+              src={dress.image.url}
             />
             <p>
-              {dress.name}
+              {dressName}
             </p>
           </>
         )

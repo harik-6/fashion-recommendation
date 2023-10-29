@@ -2,12 +2,11 @@ const app = require('express')();
 const port = 9000;
 const path = require('path');
 const multer = require('multer');
-// const OpenAI = require("openai");
-// const openai = new OpenAI({ apiKey:"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" });
+const cors = require('cors');
 
 const FeatureExtractor = require('./feature-extractor/index');
 const RecommendationEngine = require('./recommendation-engine/index');
-const ImageGeneratorService = require('./openai-image-generator');
+const ImageGeneratorService = require('./image-generator');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -21,6 +20,8 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
+app.use(cors());
+
 app.post('/image', upload.single('image'), async (req, res) => {
   const imagePath = req.file.path;
   console.log(`Image uploaded to ${imagePath}`);
@@ -29,7 +30,7 @@ app.post('/image', upload.single('image'), async (req, res) => {
   res.status(200).json(feature);
 });
 
-app.get('/recommendation', async (req, res) => {
+app.post('/recommendation', async (req, res) => {
   const raw_user_features = req.body;
   console.log(`Raw user features ${raw_user_features}`);
   let recommendations = await RecommendationEngine.getPersonRecommendation(raw_user_features);
