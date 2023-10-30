@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-
+import { RecommendationImages, Page, NavigationBar, Preloader } from './components';
 
 const mockData = [
   {
@@ -88,23 +88,14 @@ function AppMock() {
   if (loader.loading) {
     return <Page>
       <NavigationBar />
-      <div style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        minHeight: '90vh'
-      }} >
-        <div className='page-loader' />
-        <h2>{loader.message}</h2>
-      </div>
+      <Preloader message={loader.message} />
     </Page>
   }
 
   if (showRec) {
     return <Page>
       <NavigationBar />
-      <RecommendationImages data={[]} onBack={resetAll} />
+      <RecommendationImages data={mockData} onBack={resetAll} />
     </Page>
   }
 
@@ -156,70 +147,7 @@ function AppMock() {
 
 }
 
-function RecommendationImages({ onBack }) {
-  return <div style={{
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: "center",
-    minHeight: "90vh",
-  }} >
-    <p onClick={onBack} style={{ textDecoration: 'underline', cursor: 'pointer' }} >{"< Back"}</p>
-    {
-      mockData.map((dress) => {
-        const dressName = dress.color + dress.type
-        return (
-          <>
-            <img
-              height="350px"
-              width="300px"
-              alt={dressName}
-              src={dress.image.url}
-            />
-            <p>
-              {dressName}
-            </p>
-          </>
-        )
-      })
-    }
-  </div>
-}
 
-function NavigationBar() {
-  return (
-    <div style={{
-      display: "flex",
-      color: "white",
-      justifyContent: "center",
-      backgroundColor: "#0C356A",
-    }} >
-      <h2>
-        Fashion recommendation
-      </h2>
-    </div>
-  )
-}
-
-function Page({ children }) {
-  return <div style={{
-    backgroundColor: 'grey',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    overflow: 'hidden'
-
-  }} >
-    <div style={{
-      maxHeight: "100vh",
-      minHeight: "100vh",
-      maxWidth: "425px",
-      backgroundColor: 'white',
-      overflow: 'scroll',
-      scrollbarWidth: "0px"
-    }} >
-      {children}
-    </div>
-  </div>
-}
 
 
 export default AppMock;

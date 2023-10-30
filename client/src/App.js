@@ -1,59 +1,9 @@
 // import React, { useState } from 'react';
 // import ApiService from './service';
+// import { RecommendationImages, Page, NavigationBar, Preloader } from './components';
 // import ImageUploader from 'react-image-upload'
 // import 'react-image-upload/dist/index.css'
 
-
-// const mockData = [
-//   {
-//     "id": 1,
-//     "type": "T-Shirt",
-//     "color": "Blue",
-//     "skin": "Light",
-//     "height": "Short",
-//     "weight": "Thin",
-//     "shoulder": "Narrow",
-//     "occasion": "wedding",
-//     "image": {
-//       "id": "66CEU08LD0P5G3SSDHCV1698575755.2340846",
-//       "status": "processing",
-//       "url": "https://audiospace-1-u9912847.deta.app/getpic?id=66CEU08LD0P5G3SSDHCV1698575755.2340846",
-//       "servercode": 0
-//     }
-//   },
-//   {
-//     "id": 2,
-//     "type": "Shirt",
-//     "color": "Red",
-//     "skin": "Dark",
-//     "height": "Tall",
-//     "weight": "Thin",
-//     "shoulder": "Wide",
-//     "occasion": "casual",
-//     "image": {
-//       "id": "TCZQ7YLU7EH06BZ3TTRG1698575757.2046175",
-//       "status": "processing",
-//       "url": "https://audiospace-1-u9912847.deta.app/getpic?id=TCZQ7YLU7EH06BZ3TTRG1698575757.2046175",
-//       "servercode": 8
-//     }
-//   },
-//   {
-//     "id": 3,
-//     "type": "Jeans",
-//     "color": "Black",
-//     "skin": "Light",
-//     "height": "Medium",
-//     "weight": "Average",
-//     "shoulder": "N/A",
-//     "occasion": "formal",
-//     "image": {
-//       "id": "N9SC7MCKD6LOFXP4UGM21698575759.003108",
-//       "status": "processing",
-//       "url": "https://audiospace-1-u9912847.deta.app/getpic?id=N9SC7MCKD6LOFXP4UGM21698575759.003108",
-//       "servercode": 7
-//     }
-//   }
-// ]
 
 // const styles = {
 //   button: {
@@ -114,16 +64,7 @@
 //   if (loader.loading) {
 //     return <Page>
 //       <NavigationBar />
-//       <div style={{
-//         display: 'flex',
-//         flexDirection: 'column',
-//         alignItems: 'center',
-//         justifyContent: 'center',
-//         minHeight: '90vh'
-//       }} >
-//         <div className='page-loader' />
-//         <h2>{loader.message}</h2>
-//       </div>
+//       <Preloader message={loader.message} />
 //     </Page>
 //   }
 
@@ -179,71 +120,6 @@
 //     </Page>
 //   )
 
-// }
-
-// function RecommendationImages({ onBack }) {
-//   return <div style={{
-//     display: 'flex',
-//     flexDirection: 'column',
-//     alignItems: "center",
-//     minHeight: "90vh",
-//   }} >
-//     <p onClick={onBack} style={{ textDecoration: 'underline', cursor: 'pointer' }} >{"< Back"}</p>
-//     {
-//       mockData.map((dress) => {
-//         const dressName = dress.color + dress.type
-//         return (
-//           <>
-//             <img
-//               height="350px"
-//               width="300px"
-//               alt={dressName}
-//               src={dress.image.url}
-//             />
-//             <p>
-//               {dressName}
-//             </p>
-//           </>
-//         )
-//       })
-//     }
-//   </div>
-// }
-
-// function NavigationBar() {
-//   return (
-//     <div style={{
-//       display: "flex",
-//       color: "white",
-//       justifyContent: "center",
-//       backgroundColor: "#0C356A",
-//     }} >
-//       <h2>
-//         Fashion recommendation
-//       </h2>
-//     </div>
-//   )
-// }
-
-// function Page({ children }) {
-//   return <div style={{
-//     backgroundColor: 'grey',
-//     marginLeft: 'auto',
-//     marginRight: 'auto',
-//     overflow: 'hidden'
-
-//   }} >
-//     <div style={{
-//       maxHeight: "100vh",
-//       minHeight: "100vh",
-//       maxWidth: "425px",
-//       backgroundColor: 'white',
-//       overflow: 'scroll',
-//       scrollbarWidth: "0px"
-//     }} >
-//       {children}
-//     </div>
-//   </div>
 // }
 
 
