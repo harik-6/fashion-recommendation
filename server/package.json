@@ -1,5 +1,5 @@
 {
-  "name": "swetha-fashion-recom",
+  "name": "fashion-recommendation-server",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
